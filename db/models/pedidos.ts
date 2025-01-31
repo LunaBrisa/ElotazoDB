@@ -30,7 +30,19 @@ const Pedidos = sequelize.define("pedidos", {
     fecha_entrega: {
         type: DataTypes.DATE,
         allowNull: false
-    }
+    },
+    status: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    descripcion:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    metodo_pago: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
 
 },{
 

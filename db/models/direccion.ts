@@ -12,7 +12,7 @@ const Direccion = sequelize.define("direccion", {
         primaryKey: true,
         autoIncrement: true
     },
-    colonia: {
+    col: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -20,14 +20,18 @@ const Direccion = sequelize.define("direccion", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    numero_ext: {
+    numero_ex: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    codigo_postal: {
+    codigo: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
+    id_persona:{
+        type: DataTypes.INTEGER,
+        allowNull: false
+    }
 },
 {
 });
