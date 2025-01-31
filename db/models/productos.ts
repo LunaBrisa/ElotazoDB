@@ -16,11 +16,15 @@ const Productos = sequelize.define("productos", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    precio: {
+    precio_u: {
         type: DataTypes.DECIMAL(10,2),
         allowNull: false
     },
-    estado:{
+    descripcion:{
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    status:{
         type: DataTypes.STRING,
         allowNull: false
     }

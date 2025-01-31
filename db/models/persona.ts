@@ -16,11 +16,11 @@ const Persona = sequelize.define("persona", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    apellido_paterno: {
+    a_p: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    apellido_materno: {
+    a_m: {
         type: DataTypes.STRING,
         allowNull: false
     },
@@ -28,7 +28,7 @@ const Persona = sequelize.define("persona", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    fecha_nacimiento: {
+    fecha_nac: {
         type: DataTypes.DATE,
         allowNull: false
     },

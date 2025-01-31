@@ -16,11 +16,11 @@ const Usuario = sequelize.define("usuario", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    password:{
+    contrasena:{
         type: DataTypes.STRING,
         allowNull: false
     },
-    email:{
+    correo:{
         type: DataTypes.STRING,
         allowNull: false
     },
