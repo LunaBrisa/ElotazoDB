@@ -4,6 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"nodemon app.ts",
     "migrate": "cd ./db && npx sequelize-cli db:migrate",
     "create:migration": "cd ./db && npx sequelize-cli migration:generate --name",
     "create:seed": "cd ./db && npx sequelize-cli seed:generate --name",
