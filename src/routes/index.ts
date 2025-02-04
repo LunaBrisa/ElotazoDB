@@ -1,12 +1,26 @@
-import { Router } from 'express';
-import bcrypt from 'bcryptjs';
-import Usuario from '../db/models/usuario';
+import express from 'express';
+import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers'; // Importa el controlador
 
+const router = express.Router();
 
-const router = Router();
+router.get('/registro', (req, res) => {
+    res.render('registerc'); 
+});
 
-router.get('/login', (req, res) => {
-    res.render('login', { title: 'Iniciar Sesión' });
+router.post('/registrar', async (req, res) => {
+    await registrarCliente(req, res);
+});
+
+router.get('/registrorepa', (req, res) => {
+    res.render('registerr'); 
+});
+
+router.post('/registrarepa', async (req, res) => {
+    await registrarRepartidor(req, res);
+});
+
+router.get('/', (req, res) => {
+    res.render('inicio');
 });
 
 export default router;

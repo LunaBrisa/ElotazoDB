@@ -28,11 +28,11 @@ const Direccion = sequelize.define("direccion", {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    id_persona:{
+    id_usuario:{
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
-            model: 'persona',
+            model: 'usuario',
             key: 'id'
         }
     },

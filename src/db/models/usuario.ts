@@ -1,7 +1,6 @@
 require('dotenv').config();
 import { DataTypes, Model, Sequelize, Optional } from 'sequelize';
 
-// Define los atributos del modelo Usuario
 interface UsuarioAttributes {
   id: number;
   nombre_usuario: string;
@@ -11,7 +10,6 @@ interface UsuarioAttributes {
   updatedAt?: Date;
 }
 
-// Define los atributos opcionales al crear (id no es requerido)
 interface UsuarioCreationAttributes extends Optional<UsuarioAttributes, 'id'> {}
 
 class Usuario
@@ -63,7 +61,7 @@ const sequelize = new Sequelize("elotazodb", "root", "1234", {
     {
       sequelize,
       modelName: 'usuario',
-      tableName: 'usuarios', // Cambia según el nombre de tu tabla
+      tableName: 'usuario', 
     }
   );
   

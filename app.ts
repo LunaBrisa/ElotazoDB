@@ -1,14 +1,20 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import router from './src/routes/index'; // Asegúrate de que la ruta sea correcta
+import router from './src/routes/index';
+import path from 'path';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json()); // ✅ Necesario para procesar JSON en `req.body`
-app.use('/', router); // ✅ Asegúrate de usar un prefijo adecuado
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'src', 'views')); 
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+app.use('/', router);
 
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
