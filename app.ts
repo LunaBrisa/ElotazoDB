@@ -1,24 +1,15 @@
-require('dotenv').config();
-import express from "express";
-import Router from "./src/routes/index";
-import bodyParser from "body-parser";
-import path from "path";
+import express from 'express';
+import dotenv from 'dotenv';
+import router from './src/routes/index'; // Asegúrate de que la ruta sea correcta
 
-const app=express();
-const PORT=process.env.PORT || 3000;
+dotenv.config();
 
-app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "src", "views")); // Asegúrate de que la carpeta "views" está en "src"
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static(path.join(__dirname, "public"))); 
+app.use(express.json()); // ✅ Necesario para procesar JSON en `req.body`
+app.use('/', router); // ✅ Asegúrate de usar un prefijo adecuado
 
-app.use(bodyParser.json())
-app.use(express.json());
-app.use("/", Router);
-
-app.listen(PORT, ()=>{
-    console.log(`App listening on port ${PORT}`);
-console.log('Press Ctrl+C to quit');
-})
-
-
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+});
