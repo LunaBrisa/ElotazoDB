@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+</head>
+<body>
+    <div>
+        <h1>Mi Perfil</h1>
+        <p>Usuario: <span id="nombre_usuario"></span></p>
+        <p>Correo: <span id="correo"></span></p>
+        <p>Nombre: <span id="nombre"></span></p>
+        <p>Apellido Paterno: <span id="a_p"></span></p>
+        <p>Apellido Materno: <span id="a_m"></span></p>
+        <p>Fecha Nacimiento: <span id="fecha_nac"></span></p>
+        <p>Genero: <span id="genero"></span></p>        
+        <button onclick="cerrarSesion()">Cerrar Sesión</button>
+    </div>
+
+    <script>
+        async function cargarPerfil() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('No has iniciado sesión.');
+                window.location.href = '/login.html';  // Redirigir si no hay sesión
+                return;
+            }
+
+            try {
+                const response = await fetch('/perfil', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('No se pudo obtener la información del perfil.');
+                }
+
+                const usuario = await response.json();
+                document.getElementById('nombre_usuario').textContent = usuario.nombre_usuario;
+                document.getElementById('correo').textContent = usuario.correo;
+                document.getElementById('nombre').textContent = usuario.nombre;
+                document.getElementById('a_p').textContent = usuario.a_p;
+                document.getElementById('a_m').textContent = usuario.a_m;
+                document.getElementById('fecha_nac').textContent = usuario.fecha_nac;
+                document.getElementById('genero').textContent = usuario.genero;
+            } catch (error) {
+                console.error(error);
+                alert('Hubo un problema al cargar el perfil.');
+            }
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('token');  // Eliminar el token
+            window.location.href = '/loginn';  // Redirigir al login
+        }
+
+        // Llamar a la función al cargar la página
+        window.onload = cargarPerfil;
+    </script>
+</body>
+</html>

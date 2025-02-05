@@ -55,7 +55,7 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-const logout = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response) => {
   try {
     const token = req.cookies.token;
     if (!token) {

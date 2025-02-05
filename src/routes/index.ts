@@ -1,6 +1,6 @@
 import express from 'express';
 import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers';
-import {login} from '../controllers/authController';
+import {login, logout} from '../controllers/authController';    
 const router = express.Router();
 
 router.get('/registro', (req, res) => {
@@ -25,6 +25,9 @@ router.post('/login', async (req, res) => {
     await login(req, res);
 });
 
+router.post('/logout', async (req, res) => {
+    await logout(req, res);
+});
 
 router.get('/', (req, res) => {
     res.render('inicio');
