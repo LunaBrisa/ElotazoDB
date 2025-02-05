@@ -1,6 +1,6 @@
 import express from 'express';
-import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers'; // Importa el controlador
-
+import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers';
+import {login} from '../controllers/authController';
 const router = express.Router();
 
 router.get('/registro', (req, res) => {
@@ -18,6 +18,13 @@ router.get('/registrorepa', (req, res) => {
 router.post('/registrarepa', async (req, res) => {
     await registrarRepartidor(req, res);
 });
+router.get('/loginn', (req, res) => {
+    res.render('login');
+});
+router.post('/login', async (req, res) => {
+    await login(req, res);
+});
+
 
 router.get('/', (req, res) => {
     res.render('inicio');
