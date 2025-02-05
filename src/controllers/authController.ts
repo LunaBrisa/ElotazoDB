@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import Usuario from '../db/models/usuario';
-import Persona from "../db/models/persona";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'RjMW2Dc7kOl0hpgWdYmBcY4pXTd1h37T';
 
