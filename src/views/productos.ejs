@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4e2a6;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            background: #8b5a2b;
+            color: white;
+            padding: 15px;
+        }
+        .catalogo {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 20px;
+        }
+        .producto {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px;
+            width: 250px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .producto img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .producto h3 {
+            color: #8b5a2b;
+        }
+        .precio {
+            font-size: 18px;
+            font-weight: bold;
+            color: #d4a373;
+        }
+        .btn-ordenar, .btn-carrito {
+            background: #d4a373;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .btn-ordenar:hover, .btn-carrito:hover {
+            background: #b8864c;
+        }
+        .ventana {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .ventana h2 {
+            margin-top: 0;
+        }
+        .ventana input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .btn-cerrar, .btn-enviar {
+            background: red;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-enviar {
+            background: #28a745;
+        }
+        .btn-eliminar {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Carrito de Compras</h1>
+
+    <button class="btn-carrito" onclick="mostrarCarrito()">Ver Carrito</button>
+
+    <div class="catalogo">
+        <div class="producto">
+            <img src="https://stellanspice.com/wp-content/uploads/2022/03/IMG_7844-1-scaled.jpg" alt="Elote Preparado">
+            <h3>Elote Preparado</h3>
+            <p>Elote con mayonesa, queso y chile en polvo.</p>
+            <p class="precio">$25.00</p>
+            <input type="number" class="cantidad" min="1" max="20" value="1">
+            <button class="btn-ordenar" onclick="agregarAlCarrito('Elote Preparado', 25)">Ordenar</button>
+        </div>
+
+        <div class="producto">
+            <img src="https://revistaaventurero.com.mx/wp-content/uploads/2022/09/Esquites-www.mylatinatable.com_.jpg" alt="Esquite">
+            <h3>Esquite</h3>
+            <p>Vaso con elote, limón, mayonesa, queso y chile.</p>
+            <p class="precio">$30.00</p>
+            <input type="number" class="cantidad" min="1" max="20" value="1">
+            <button class="btn-ordenar" onclick="agregarAlCarrito('Esquite', 30)">Ordenar</button>
+        </div>
+    
+        <div class="producto">
+            <img src="https://i.pinimg.com/originals/4f/03/bb/4f03bb6db41f4d51e04576b0fef239a7.jpg" alt="Tostitos">
+            <h3>Tostitos</h3>
+            <p>Tostitos con ingredientes varios.</p>
+            <p class="precio">$50.00</p>
+            <input type="number" class="cantidad" min="1" max="20" value="1">
+            <button class="btn-ordenar" onclick="agregarAlCarrito('Tostitos', 50)">Ordenar</button>
+        </div>
+    
+
+    <div class="producto">
+        <img src="https://s23209.pcdn.co/wp-content/uploads/2018/07/Mexican-Street-Corn-NachosIMG_5709.jpg" alt="Hot Dog">
+        <h3>Nachos con Queso</h3>
+        <p> Elote desgranado, 
+            Queso amarillo líquido, 
+            Crema,
+            salsa picante,
+            Jugo de limón,
+            Cueritos,
+            Queso rallado, 
+            Chile en polvo, 
+            jalapeños</p>
+        <p class="precio">$40.00</p>
+        <label for="contador">Cantidad: </label>
+    <input type="number" id="contador" name="contador" min="1" max="20" value="1">
+    <button class="btn-ordenar" onclick="agregarAlCarrito('Nachos', 50)">Ordenar</button>
+</div>
+
+    <div class="producto">
+        <img src="https://i.pinimg.com/736x/b5/a7/8b/b5a78b7b2667f0ee69f31d3f2680c864--corn-dogs-classic.jpg" alt="Nachos con Queso">
+        <h3>Banderillas</h3>
+        <p>Mayonesa,
+            Mostaza,
+            Salsa de Tomate
+        </p>
+        <p class="precio">$15.00</p>
+        <label for="contador">Cantidad: </label>
+    <input type="number" id="contador" name="contador" min="1" max="20" value="1">
+    <button class="btn-ordenar" onclick="agregarAlCarrito('Banderillas', 50)">Ordenar</button>
+
+    </div>
+
+    <div class="producto">
+        <img src="https://th.bing.com/th/id/R.a80841927202bc5c4392cf8dbb024281?rik=CxPOcE30cZdHog&riu=http%3a%2f%2fenlacedigitalbajio.com%2fwp-content%2fuploads%2f2018%2f03%2fCHATARRA.jpg&ehk=Ow%2bziGo%2b1Opk6EiFlBWOEoODBy7HqEayqhe5ddYoQ0o%3d&risl=&pid=ImgRaw&r=0" alt="Tamales">
+        <h3>Fritura </h3>
+        <p>Queso amarillo líquido, 
+            Crema,
+            salsa picante ,
+            Jugo de limón,
+            Cueritos </p>
+        <p class="precio">$25.00 c/u</p>
+        <label for="contador">Cantidad: </label>
+    <input type="number" id="contador" name="contador" min="1" max="20" value="1">
+    <button class="btn-ordenar" onclick="agregarAlCarrito('Fritura', 50)">Ordenar</button>
+
+    </div>
+</div>
+
+
+<div class="ventana" id="carritoVentana">
+    <h2>Carrito</h2>
+    <div class="carrito-items" id="carritoItems"></div>
+    <button class="btn-cerrar" onclick="cerrarCarrito()">Cerrar</button>
+    <button class="btn-enviar" onclick="mostrarFormulario()">Pedir</button>
+</div>
+
+<div class="ventana" id="formularioVentana">
+    <h2>Datos de Envío</h2>
+    <input type="text" id="colonia" placeholder="Colonia">
+    <input type="text" id="calle" placeholder="Calle">
+    <input type="text" id="codigo" placeholder="Código Postal">
+    <input type="text" id="numero" placeholder="Número Exterior">
+    <button class="btn-enviar" onclick="enviarPedido()">Enviar Pedido</button>
+    <button class="btn-cerrar" onclick="cerrarFormulario()">Cancelar</button>
+</div>
+
+<script>
+  function enviarPedido() {
+    let colonia = document.getElementById("colonia").value;
+    let calle = document.getElementById("calle").value;
+    let codigo = document.getElementById("codigo").value;
+    let numero = document.getElementById("numero").value;
+    let idPersona = 1; // Aquí debes obtener el ID de la persona (puede ser desde un campo oculto o una sesión)
+
+    if (colonia && calle && codigo && numero) {
+        let direccion = {
+            colonia: colonia,
+            calle: calle,
+            codigo: codigo,
+            numero: numero,
+            id_persona: idPersona // Incluye el ID de la persona
+        };
+
+        fetch('guardar_direccion.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(direccion)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Dirección guardada con éxito.");
+                cerrarFormulario();
+            } else {
+                alert("Hubo un error al guardar la dirección.");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Hubo un error al guardar la dirección.");
+        });
+    } else {
+        alert("Por favor, completa todos los campos.");
+    }
+}
+
+
+    let carrito = [];
+
+    function agregarAlCarrito(nombre, precio) {
+        let cantidad = parseInt(document.querySelector(`.producto h3:contains("${nombre}")`).parentNode.querySelector('.cantidad').value);
+
+        carrito.push({ nombre, precio, cantidad });
+        actualizarCarrito();
+        actualizarEstadoBotonPedir();
+    }
+
+    function actualizarCarrito() {
+        let carritoItems = document.getElementById("carritoItems");
+        carritoItems.innerHTML = "";
+
+        carrito.forEach((producto, index) => {
+            let item = document.createElement("div");
+            item.innerHTML = `
+                <p>${producto.nombre} - ${producto.cantidad} x $${producto.precio}</p>
+                <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
+            `;
+            carritoItems.appendChild(item);
+        });
+
+        actualizarEstadoBotonPedir();
+    }
+
+    function eliminarDelCarrito(index) {
+        carrito.splice(index, 1);
+        actualizarCarrito();
+        actualizarEstadoBotonPedir();
+    }
+
+    function actualizarEstadoBotonPedir() {
+        let botonPedir = document.querySelector(".btn-enviar");
+        botonPedir.disabled = carrito.length === 0;
+    }
+
+    function mostrarCarrito() {
+        document.getElementById("carritoVentana").style.display = "block";
+        actualizarEstadoBotonPedir();
+    }
+
+    function cerrarCarrito() {
+        document.getElementById("carritoVentana").style.display = "none";
+    }
+</script>
+</body>
+</html>
