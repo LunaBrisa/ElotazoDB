@@ -34,6 +34,7 @@ router.post('/nuevaDireccion', async (req, res) => {
     await authMiddleware, nuevaDireccion(req, res);
 });
 
+
 router.get("/login", (req, res) => res.render("login"));
 router.get("/inicio", (req, res) => res.render("inicio"));
 router.get("/menu", (req, res) => res.render("productos"));
