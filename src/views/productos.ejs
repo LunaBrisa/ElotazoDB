@@ -196,19 +196,51 @@
 
 <div class="ventana" id="formularioVentana" style="display: none;">
     <h2>Datos de Envío</h2>
-    <input type="text" id="colonia" placeholder="Colonia">
-    <input type="text" id="calle" placeholder="Calle">
-    <input type="text" id="codigo" placeholder="Código Postal">
-    <input type="text" id="numero" placeholder="Número Exterior">
-    <button class="btn-enviar" onclick="enviarPedido()">Enviar Pedido</button>
-    <button class="btn-cerrar" onclick="cerrarFormulario()">Cancelar</button>
+    <form id="direccionForm">
+        <input type="text" id="col" name="col" placeholder="Colonia">
+        <input type="text" id="calle" name="calle" placeholder="Calle">
+        <input type="text" id="codigo" name="codigo" placeholder="Código Postal">
+        <input type="text" id="numero_ex" name="numero_ex" placeholder="Número Exterior">
+        <button class="btn-enviar" type="submit">Enviar Pedido</button>
+        <button class="btn-cerrar" type="button" onclick="cerrarFormulario()">Cancelar</button>
+    </form>    
+    
 </div>
 
 <script>
+   document.querySelector("form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("token"); // Obtener el token almacenado en localStorage
+    if (!token) {
+        alert("No estás autenticado");
+        return;
+    }
+
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData.entries());
+
+    const response = await fetch("/nuevaDireccion", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`, // Enviar el token en la cabecera
+        },
+        body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+        alert("Dirección guardada correctamente");
+        window.location.href = "/";
+    } else {
+        const errorData = await response.json();
+        alert(errorData.message || "Error al guardar la dirección");
+    }
+});
+
     let carrito = [];
 
     function agregarAlCarrito(nombre, precio) {
-        // Buscar la cantidad en el mismo contenedor del producto
         let productoContainer = [...document.querySelectorAll('.producto')].find(p => p.querySelector('h3').innerText === nombre);
         let cantidad = parseInt(productoContainer.querySelector('.cantidad').value) || 1;
 
@@ -259,40 +291,7 @@
         document.getElementById("formularioVentana").style.display = "none";
     }
 
-    function enviarPedido() {
-    let colonia = document.getElementById("colonia").value;
-    let calle = document.getElementById("calle").value;
-    let codigo = document.getElementById("codigo").value;
-    let numero = document.getElementById("numero").value;
-    let idPersona = 1; // Cambia esto por el ID real de la persona
-
-    if (colonia && calle && codigo && numero) {
-        let direccion = { colonia, calle, codigo, numero, id_persona: idPersona };
-
-        fetch('http://localhost:3000/guardar_direccion', { // Cambia la URL si el backend está en otro lugar
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(direccion)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("Dirección guardada con éxito.");
-                cerrarFormulario();
-            } else {
-                alert("Hubo un error al guardar la dirección.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Hubo un error al guardar la dirección.");
-        });
-    } else {
-        alert("Por favor, completa todos los campos.");
-    }
-}
+  
 
 
 </script>
