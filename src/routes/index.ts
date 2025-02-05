@@ -2,7 +2,6 @@ import express from 'express';
 import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers';
 import {login, verificarToken} from '../controllers/authController';    
 import {nuevaDireccion} from '../controllers/direccionController';
-import {authMiddleware} from '../middlewares/authMiddleware';
 const router = express.Router();
 
 router.get('/registro', (req, res) => {
@@ -31,7 +30,7 @@ router.get('/', (req, res) => {
     res.render('inicio');
 });
 router.post('/nuevaDireccion', async (req, res) => {
-    await authMiddleware, nuevaDireccion(req, res);
+    await verificarToken, nuevaDireccion(req, res);
 });
 
 
