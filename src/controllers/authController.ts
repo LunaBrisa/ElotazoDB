@@ -71,6 +71,6 @@ export const logout = async (req: Request, res: Response) => {
     return res.status(200).json({ message: 'Has cerrado sesión.' });
   } catch (error) {
     console.error('Error en el logout:', error);
-    return res.status(500).json({ message: 'Error en el servidor. Inténtalo más tarde.' });
+    return res.status(500).json({ message: 'Error en el servidor. Inténtalo más tarde.'});
   }
 };

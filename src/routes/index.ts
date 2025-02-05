@@ -1,6 +1,7 @@
 import express from 'express';
 import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers';
-import {login, logout} from '../controllers/authController';    
+import {login, verificarToken} from '../controllers/authController';    
+import {nuevaDireccion} from '../controllers/direccionController';
 const router = express.Router();
 
 router.get('/registro', (req, res) => {
@@ -25,16 +26,12 @@ router.post('/login', async (req, res) => {
     await login(req, res);
 });
 
-router.post('/logout', async (req, res) => {
-    await logout(req, res);
-});
-
 router.get('/', (req, res) => {
     res.render('inicio');
 });
-
-
-
+router.post('/nuevaDireccion', async (req, res) => {
+    await verificarToken, nuevaDireccion(req, res);
+});
 
 
 router.get("/login", (req, res) => res.render("login"));
