@@ -5,6 +5,7 @@
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true, // Opcional, para evitar errores en bibliotecas
-      "outDir": "./dist"
+      "outDir": "./dist",
+      "typeRoots": ["./node_modules/@types", "src/types"]
     }
   }

@@ -1,9 +1,34 @@
-import { Router } from 'express';
-import bcrypt from 'bcryptjs';
-import Usuario from '../db/models/usuario';
+import express from 'express';
+import { registrarCliente, registrarRepartidor } from '../controllers/registerControllers';
+import {login} from '../controllers/authController';
+const router = express.Router();
+
+router.get('/registro', (req, res) => {
+    res.render('registerc'); 
+});
+
+router.post('/registrar', async (req, res) => {
+    await registrarCliente(req, res);
+});
+
+router.get('/registrorepa', (req, res) => {
+    res.render('registerr'); 
+});
+
+router.post('/registrarepa', async (req, res) => {
+    await registrarRepartidor(req, res);
+});
+router.get('/loginn', (req, res) => {
+    res.render('login');
+});
+router.post('/login', async (req, res) => {
+    await login(req, res);
+});
 
 
-const router = Router();
+router.get('/', (req, res) => {
+    res.render('inicio');
+});
 
 
 

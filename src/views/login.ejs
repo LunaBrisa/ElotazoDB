@@ -52,6 +52,10 @@
         .login-btn:hover {
             background: #b8864c;
         }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -59,15 +63,47 @@
         <h2>Bienvenido a Elotazo</h2>
         <form>
             <div class="input-group">
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" required>
             </div>
             <div class="input-group">
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" name="contrasena" required autocomplete="current-password">
             </div>
             <button type="submit" class="login-btn">Ingresar</button>
+            <p id="errorMessage" class="error-message"></p>
         </form>
     </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const correo = document.getElementById('correo').value;
+            const contrasena = document.getElementById('contrasena').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            errorMessage.textContent = '';
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ correo, contrasena }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = '/'; // Redirigir a la página principal
+                } else {
+                    errorMessage.textContent = data.message;
+                }
+            } catch (error) {
+                errorMessage.textContent = 'Error en la conexión con el servidor.';
+            }
+        });
+    </script>
 </body>
 </html>
