@@ -4,7 +4,6 @@
     <title>Recorrido del Cliente</title>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8&callback=initMap" async defer></script>
     <style>
-   
         #map {
             height: 400px;
             width: 100%;
@@ -16,7 +15,6 @@
             background-color: #f0f0f0;
             border: 1px solid #ccc;
         }
-      
         #address {
             width: 300px;
             padding: 10px;
@@ -43,23 +41,30 @@
     <div id="directions-panel"></div>
 
     <script>
-        let map;
-        let directionsService;
-        let directionsRenderer;
+        let map, directionsService, directionsRenderer, eloteMarker;
+        let stepIndex = 0;
+        let routeSteps = [];
 
         function initMap() {
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
-            const initialPosition = { lat: 25.534725067313126, lng: -103.35999659056111 }; // Tu ubicación
-
-
+            
+            const initialPosition = { lat: 25.534725067313126, lng: -103.35999659056111 };
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 14,
                 center: initialPosition,
             });
 
-
             directionsRenderer.setMap(map);
+
+            eloteMarker = new google.maps.Marker({
+                position: initialPosition,
+                map: map,
+                icon: {
+                    url: "https://cdn-icons-png.flaticon.com/512/8662/8662338.png", 
+                    scaledSize: new google.maps.Size(50, 50) 
+                }
+            });
         }
 
         function calculateRouteFromAddress() {
@@ -73,7 +78,7 @@
             const geocoder = new google.maps.Geocoder();
             geocoder.geocode({ address: address }, (results, status) => {
                 if (status === "OK") {
-                    const userLatLng = results[0].geometry.location; 
+                    const userLatLng = results[0].geometry.location;
                     calculateRoute(userLatLng);
                 } else {
                     alert("No se pudo encontrar la dirección: " + status);
@@ -82,32 +87,41 @@
         }
 
         function calculateRoute(userLatLng) {
-            const destination = { lat: 25.534725067313126, lng: -103.35999659056111 }; 
+            const destination = { lat: 25.534725067313126, lng: -103.35999659056111 };
 
-            
             directionsService.route(
                 {
                     origin: userLatLng,
                     destination: destination,
-                    travelMode: google.maps.TravelMode.DRIVING, 
+                    travelMode: google.maps.TravelMode.DRIVING,
                 },
                 (response, status) => {
                     if (status === "OK") {
-                        
                         directionsRenderer.setDirections(response);
-                   
                         document.getElementById("directions-panel").innerHTML =
                             "Distancia: " + response.routes[0].legs[0].distance.text + "<br>" +
                             "Duración: " + response.routes[0].legs[0].duration.text;
+
+                        routeSteps = response.routes[0].legs[0].steps.flatMap(step =>
+                            step.path.map(latLng => ({ lat: latLng.lat(), lng: latLng.lng() }))
+                        );
+
+                        stepIndex = 0;
+                        moveElote();
                     } else {
                         console.error("Error al calcular la ruta: ", status);
                     }
                 }
             );
         }
+
+        function moveElote() {
+            if (stepIndex < routeSteps.length) {
+                eloteMarker.setPosition(routeSteps[stepIndex]);
+                stepIndex++;
+                setTimeout(moveElote, 100); 
+            }
+        }
     </script>
 </body>
 </html>
-
-    <!--   api AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8
-     25.534725067313126, -103.35999659056111-->
