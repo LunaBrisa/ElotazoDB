@@ -23,7 +23,7 @@ class Usuario
   public readonly updatedAt!: Date;
 }
 
-const sequelize = new Sequelize("elotazodb", "root", "1234", {
+const sequelize = new Sequelize("elotazodb", "root", "300105", {
     host: process.env.DB_HOST,
     dialect: 'mysql',
   });

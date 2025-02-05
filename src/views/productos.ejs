@@ -187,15 +187,14 @@
     </div>
 </div>
 
-
-<div class="ventana" id="carritoVentana">
+<div class="ventana" id="carritoVentana" style="display: none;">
     <h2>Carrito</h2>
     <div class="carrito-items" id="carritoItems"></div>
     <button class="btn-cerrar" onclick="cerrarCarrito()">Cerrar</button>
-    <button class="btn-enviar" onclick="mostrarFormulario()">Pedir</button>
+    <button class="btn-enviar" id="btnPedir" onclick="mostrarFormulario()" disabled>Pedir</button>
 </div>
 
-<div class="ventana" id="formularioVentana">
+<div class="ventana" id="formularioVentana" style="display: none;">
     <h2>Datos de Envío</h2>
     <input type="text" id="colonia" placeholder="Colonia">
     <input type="text" id="calle" placeholder="Calle">
@@ -206,23 +205,71 @@
 </div>
 
 <script>
-  function enviarPedido() {
+    let carrito = [];
+
+    function agregarAlCarrito(nombre, precio) {
+        // Buscar la cantidad en el mismo contenedor del producto
+        let productoContainer = [...document.querySelectorAll('.producto')].find(p => p.querySelector('h3').innerText === nombre);
+        let cantidad = parseInt(productoContainer.querySelector('.cantidad').value) || 1;
+
+        carrito.push({ nombre, precio, cantidad });
+        actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+        let carritoItems = document.getElementById("carritoItems");
+        carritoItems.innerHTML = "";
+
+        carrito.forEach((producto, index) => {
+            let item = document.createElement("div");
+            item.innerHTML = `
+                <p>${producto.nombre} - ${producto.cantidad} x $${producto.precio}</p>
+                <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
+            `;
+            carritoItems.appendChild(item);
+        });
+
+        actualizarEstadoBotonPedir();
+    }
+
+    function eliminarDelCarrito(index) {
+        carrito.splice(index, 1);
+        actualizarCarrito();
+    }
+
+    function actualizarEstadoBotonPedir() {
+        let botonPedir = document.getElementById("btnPedir");
+        botonPedir.disabled = carrito.length === 0;
+    }
+
+    function mostrarCarrito() {
+        document.getElementById("carritoVentana").style.display = "block";
+        actualizarEstadoBotonPedir();
+    }
+
+    function cerrarCarrito() {
+        document.getElementById("carritoVentana").style.display = "none";
+    }
+
+    function mostrarFormulario() {
+        document.getElementById("formularioVentana").style.display = "block";
+    }
+
+    function cerrarFormulario() {
+        document.getElementById("formularioVentana").style.display = "none";
+    }
+
+    function enviarPedido() {
     let colonia = document.getElementById("colonia").value;
     let calle = document.getElementById("calle").value;
     let codigo = document.getElementById("codigo").value;
     let numero = document.getElementById("numero").value;
-    let idPersona = 1; // Aquí debes obtener el ID de la persona (puede ser desde un campo oculto o una sesión)
+    let idPersona = 1; // Cambia esto por el ID real de la persona
 
     if (colonia && calle && codigo && numero) {
-        let direccion = {
-            colonia: colonia,
-            calle: calle,
-            codigo: codigo,
-            numero: numero,
-            id_persona: idPersona // Incluye el ID de la persona
-        };
+        let direccion = { colonia, calle, codigo, numero, id_persona: idPersona };
 
-        fetch('guardar_direccion.php', {
+        fetch('http://localhost:3000/guardar_direccion', { // Cambia la URL si el backend está en otro lugar
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -248,51 +295,7 @@
 }
 
 
-    let carrito = [];
-
-    function agregarAlCarrito(nombre, precio) {
-        let cantidad = parseInt(document.querySelector(`.producto h3:contains("${nombre}")`).parentNode.querySelector('.cantidad').value);
-
-        carrito.push({ nombre, precio, cantidad });
-        actualizarCarrito();
-        actualizarEstadoBotonPedir();
-    }
-
-    function actualizarCarrito() {
-        let carritoItems = document.getElementById("carritoItems");
-        carritoItems.innerHTML = "";
-
-        carrito.forEach((producto, index) => {
-            let item = document.createElement("div");
-            item.innerHTML = `
-                <p>${producto.nombre} - ${producto.cantidad} x $${producto.precio}</p>
-                <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
-            `;
-            carritoItems.appendChild(item);
-        });
-
-        actualizarEstadoBotonPedir();
-    }
-
-    function eliminarDelCarrito(index) {
-        carrito.splice(index, 1);
-        actualizarCarrito();
-        actualizarEstadoBotonPedir();
-    }
-
-    function actualizarEstadoBotonPedir() {
-        let botonPedir = document.querySelector(".btn-enviar");
-        botonPedir.disabled = carrito.length === 0;
-    }
-
-    function mostrarCarrito() {
-        document.getElementById("carritoVentana").style.display = "block";
-        actualizarEstadoBotonPedir();
-    }
-
-    function cerrarCarrito() {
-        document.getElementById("carritoVentana").style.display = "none";
-    }
 </script>
+
 </body>
 </html>

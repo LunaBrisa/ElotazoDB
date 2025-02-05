@@ -2,8 +2,6 @@ import express from 'express';
 import dotenv from 'dotenv';
 import router from './src/routes/index';
 import path from 'path';
-import path from 'path';
-import router from './src/routes/index'; 
 
 
 dotenv.config();
