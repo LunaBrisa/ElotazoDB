@@ -13,7 +13,7 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
-        req.body.usuario = decoded; // Adjuntar datos del usuario al request
+        req.body.usuario = decoded; 
         next();
     } catch (error) {
         res.status(401).send("Token inválido o expirado.");
