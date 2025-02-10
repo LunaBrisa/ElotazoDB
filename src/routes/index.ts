@@ -39,5 +39,6 @@ router.get("/inicio", (req, res) => res.render("inicio"));
 router.get("/menu", (req, res) => res.render("productos"));
 router.get("/perfil", (req, res) => res.render("perfil"));
 router.get("/estado", (req, res) => res.render("estadorepartidor"));
+router.get("/aceptado", (req, res) => res.render("aceptacion"));
 
 export default router;

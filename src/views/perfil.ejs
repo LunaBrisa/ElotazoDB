@@ -1,127 +1,67 @@
+
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Recorrido del Cliente</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8&callback=initMap" async defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recorrido del Repartidor</title>
     <style>
         #map {
-            height: 400px;
             width: 100%;
-            margin-top: 10px;
+            height: 500px;
         }
         #directions-panel {
             margin-top: 10px;
-            padding: 10px;
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-        }
-        #address {
-            width: 300px;
-            padding: 10px;
             font-size: 16px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Recorrido del Repartidor</h1>
-    <input type="text" id="address" placeholder="Ingresa tu dirección">
-    <button onclick="calculateRouteFromAddress()">Calcular Ruta</button>
-    <div id="map"></div>
-    <div id="directions-panel"></div>
-    
+    <h1>Perfil</h1>
+    <h2>Mi Dirección</h2>
+    <p id="direccionInfo">Cargando dirección...</p>
+
+    <h2>Mapa</h2>
+    <div id="map" style="width: 100%; height: 400px;"></div>
+
     <script>
-        let map, directionsService, directionsRenderer, eloteMarker;
-        let stepIndex = 0;
-        let routeSteps = [];
-    
+        let map, marker, geocoder;
+
         function initMap() {
-            directionsService = new google.maps.DirectionsService();
-            directionsRenderer = new google.maps.DirectionsRenderer();
-            
-            const initialPosition = { lat: 25.534725067313126, lng: -103.35999659056111 };
+            geocoder = new google.maps.Geocoder();
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 14,
-                center: initialPosition,
+                center: { lat: 25.5347, lng: -103.3599 }, // Ubicación inicial
             });
-    
-            directionsRenderer.setMap(map);
-    
-            eloteMarker = new google.maps.Marker({
-                position: initialPosition,
+
+            marker = new google.maps.Marker({
                 map: map,
-                icon: {
-                    url: "https://cdn-icons-png.flaticon.com/512/8662/8662338.png", 
-                    scaledSize: new google.maps.Size(50, 50) 
-                }
             });
-        }
-    
-        function calculateRouteFromAddress() {
-            const address = document.getElementById("address").value;
-    
-            if (!address) {
-                alert("Por favor, ingresa una dirección.");
-                return;
-            }
-    
-            const geocoder = new google.maps.Geocoder();
-            geocoder.geocode({ address: address }, (results, status) => {
-                if (status === "OK") {
-                    const userLatLng = results[0].geometry.location;
-                    calculateRoute(userLatLng);
-                } else {
-                    alert("No se pudo encontrar la dirección: " + status);
-                }
-            });
-        }
-    
-        function calculateRoute(destinationLatLng) { 
-            const origin = { lat: 25.534725067313126, lng: -103.35999659056111 }; 
-    
-            directionsService.route(
-                {
-                    origin: origin,
-                    destination: destinationLatLng,
-                    travelMode: google.maps.TravelMode.DRIVING,
-                },
-                (response, status) => {
+
+            // Obtener dirección guardada en localStorage
+            const direccionGuardada = localStorage.getItem("direccionUsuario");
+            if (direccionGuardada) {
+                const direccion = JSON.parse(direccionGuardada);
+                document.getElementById("direccionInfo").innerText = 
+                    `${direccion.calle}, ${direccion.col}, CP ${direccion.codigo}, No. ${direccion.numero_ex}`;
+
+                // Convertir la dirección en coordenadas y mostrarla en el mapa
+                geocoder.geocode({ address: `${direccion.calle}, ${direccion.col}, ${direccion.codigo}` }, (results, status) => {
                     if (status === "OK") {
-                        directionsRenderer.setDirections(response);
-                        document.getElementById("directions-panel").innerHTML =
-                            "Distancia: " + response.routes[0].legs[0].distance.text + "<br>" +
-                            "Duración: " + response.routes[0].legs[0].duration.text;
-    
-                        routeSteps = response.routes[0].legs[0].steps.flatMap(step =>
-                            step.path.map(latLng => ({ lat: latLng.lat(), lng: latLng.lng() }))
-                        );
-    
-                        stepIndex = 0;
-                        moveElote();
+                        map.setCenter(results[0].geometry.location);
+                        marker.setPosition(results[0].geometry.location);
                     } else {
-                        console.error("Error al calcular la ruta: ", status);
+                        console.error("No se pudo geocodificar la dirección: " + status);
                     }
-                }
-            );
-        }
-    
-        function moveElote() {
-            if (stepIndex < routeSteps.length) {
-                eloteMarker.setPosition(routeSteps[stepIndex]);
-                stepIndex++;
-                setTimeout(moveElote, 100); 
+                });
+            } else {
+                document.getElementById("direccionInfo").innerText = "No hay dirección guardada.";
             }
         }
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8&callback=initMap"></script>
-    
+
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8&callback=initMap">
+    </script>
+</body>
+
