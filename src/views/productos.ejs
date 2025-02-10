@@ -18,13 +18,19 @@
             padding: 15px;
         }
         .catalogo {
+            background: #fff3cd;
+            border-radius: 10px;
             display: flex;
+            justify-content:center;
+            padding: 15px;
+            margin: 15px;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             flex-wrap: wrap;
-            justify-content: center;
-            padding: 20px;
+            text-align: center;
+            gap: 15px;
         }
         .producto {
-            background: #fff3cd;
             border-radius: 10px;
             padding: 15px;
             margin: 15px;
@@ -102,6 +108,17 @@
             border-radius: 5px;
             font-size: 14px;
         }
+        .direccion-cuadro {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+}
+
     </style>
 </head>
 <body>
@@ -109,80 +126,24 @@
     <h1>Carrito de Compras</h1>
 
     <button class="btn-carrito" onclick="mostrarCarrito()">Ver Carrito</button>
-
+    <div style="display: flex; justify-content: center; ">
     <div class="catalogo">
-        <div class="producto">
-            <img src="https://stellanspice.com/wp-content/uploads/2022/03/IMG_7844-1-scaled.jpg" alt="Elote Preparado">
-            <h3>Elote Preparado</h3>
-            <p>Elote con mayonesa, queso y chile en polvo.</p>
-            <p class="precio">$25.00</p>
-            <input type="number" class="cantidad" min="1" max="20" value="1">
-            <button class="btn-ordenar" onclick="agregarAlCarrito('Elote Preparado', 25)">Ordenar</button>
-        </div>
-
-        <div class="producto">
-            <img src="https://revistaaventurero.com.mx/wp-content/uploads/2022/09/Esquites-www.mylatinatable.com_.jpg" alt="Esquite">
-            <h3>Esquite</h3>
-            <p>Vaso con elote, limón, mayonesa, queso y chile.</p>
-            <p class="precio">$30.00</p>
-            <input type="number" class="cantidad" min="1" max="20" value="1">
-            <button class="btn-ordenar" onclick="agregarAlCarrito('Esquite', 30)">Ordenar</button>
-        </div>
-    
-        <div class="producto">
-            <img src="https://i.pinimg.com/originals/4f/03/bb/4f03bb6db41f4d51e04576b0fef239a7.jpg" alt="Tostitos">
-            <h3>Tostitos</h3>
-            <p>Tostitos con ingredientes varios.</p>
-            <p class="precio">$50.00</p>
-            <input type="number" class="cantidad" min="1" max="20" value="1">
-            <button class="btn-ordenar" onclick="agregarAlCarrito('Tostitos', 50)">Ordenar</button>
-        </div>
-    
-
-    <div class="producto">
-        <img src="https://s23209.pcdn.co/wp-content/uploads/2018/07/Mexican-Street-Corn-NachosIMG_5709.jpg" alt="Hot Dog">
-        <h3>Nachos con Queso</h3>
-        <p> Elote desgranado, 
-            Queso amarillo líquido, 
-            Crema,
-            salsa picante,
-            Jugo de limón,
-            Cueritos,
-            Queso rallado, 
-            Chile en polvo, 
-            jalapeños</p>
-        <p class="precio">$40.00</p>
-        <input type="number" class="cantidad" min="1" max="20" value="1">
-        <button class="btn-ordenar" onclick="agregarAlCarrito('Nachos con Queso', 50)">Ordenar</button>
+        <% if (typeof productos !== 'undefined' && productos.length > 0) { %>
+            <% productos.forEach(producto => { %>
+                <div class="producto">
+                    <h3><%= producto.nombre %></h3>
+                    <p><%= producto.descripcion %></p>
+                    <p class="precio"><%= producto.precio %></p>
+                    <input type="number" class="cantidad" min="1" max="20" value="1">
+                    <button class="btn-ordenar" onclick="agregarAlCarrito('<%= producto.nombre %>')">Ordenar</button>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No hay productos disponibles.</p>
+        <% } %>
+    </div>  
 </div>
-
-    <div class="producto">
-        <img src="https://i.pinimg.com/736x/b5/a7/8b/b5a78b7b2667f0ee69f31d3f2680c864--corn-dogs-classic.jpg" alt="Nachos con Queso">
-        <h3>Banderillas</h3>
-        <p>Mayonesa,
-            Mostaza,
-            Salsa de Tomate
-        </p>
-        <p class="precio">$15.00</p>
-        <input type="number" class="cantidad" min="1" max="20" value="1">
-        <button class="btn-ordenar" onclick="agregarAlCarrito('Banderillas', 50)">Ordenar</button>
-
-    </div>
-
-    <div class="producto">
-        <img src="https://th.bing.com/th/id/R.a80841927202bc5c4392cf8dbb024281?rik=CxPOcE30cZdHog&riu=http%3a%2f%2fenlacedigitalbajio.com%2fwp-content%2fuploads%2f2018%2f03%2fCHATARRA.jpg&ehk=Ow%2bziGo%2b1Opk6EiFlBWOEoODBy7HqEayqhe5ddYoQ0o%3d&risl=&pid=ImgRaw&r=0" alt="Tamales">
-        <h3>Fritura </h3>
-        <p>Queso amarillo líquido, 
-            Crema,
-            salsa picante ,
-            Jugo de limón,
-            Cueritos </p>
-        <p class="precio">$25.00 c/u</p>
-        <input type="number" class="cantidad" min="1" max="20" value="1">
-        <button class="btn-ordenar" onclick="agregarAlCarrito('Fritura', 50)">Ordenar</button>
-    </div>
-</div>
-
+  
 <div class="ventana" id="carritoVentana" style="display: none;">
     <h2>Carrito</h2>
     <div class="carrito-items" id="carritoItems"></div>
@@ -192,48 +153,27 @@
 
 <div class="ventana" id="formularioVentana" style="display: none;">
     <h2>Datos de Envío</h2>
-    <form id="direccionForm">
-        <input type="text" id="col" name="col" placeholder="Colonia">
-        <input type="text" id="calle" name="calle" placeholder="Calle">
-        <input type="text" id="codigo" name="codigo" placeholder="Código Postal">
-        <input type="text" id="numero_ex" name="numero_ex" placeholder="Número Exterior">
+    <form id="direccionForm" style="display: flex; justify-content: center;">
+       <div class="direccion">
+        <% if (typeof direccion !== 'undefined' && direccion.length > 0) { %>
+            <% direccion.forEach(direccion => { %>
+                <div>
+                    <button class="direccion-cuadro">
+                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.estado %>, <%= direccion.ciudad %>
+                    </button> 
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No hay direcciones disponibles.</p>
+        <% } %>
         <button class="btn-enviar" type="submit">Enviar Pedido</button>
-        <button class="btn-cerrar" type="button" onclick="cerrarFormulario()">Cancelar</button>
-    </form>    
-    
+        <button class="btn-cerrar" type="button" onclick="cerrarFormulario()">Cancelar</button> 
+       </div>
+    </form>
 </div>
 
+
 <script>
-   document.querySelector("form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const token = localStorage.getItem("token"); 
-    if (!token) {
-        alert("No estás autenticado");
-        return;
-    }
-
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-
-    const response = await fetch("/nuevaDireccion", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, 
-        },
-        body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-        alert("Dirección guardada correctamente");
-        window.location.href = "/perfil";
-    } else {
-        const errorData = await response.json();
-        alert(errorData.message || "Error al guardar la dirección");
-    }
-});
-
     let carrito = [];
 
     function agregarAlCarrito(nombre, precio) {
@@ -288,38 +228,7 @@
     }
 
     function enviarPedido() {
-    let colonia = document.getElementById("colonia").value;
-    let calle = document.getElementById("calle").value;
-    let codigo = document.getElementById("codigo").value;
-    let numero = document.getElementById("numero").value;
-    let idPersona = 1; // Cambia esto por el ID real de la persona
-
-    if (colonia && calle && codigo && numero) {
-        let direccion = { colonia, calle, codigo, numero, id_persona: idPersona };
-
-        fetch('http://localhost:3000/guardar_direccion', { // Cambia la URL si el backend está en otro lugar
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(direccion)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert("Dirección guardada con éxito.");
-                cerrarFormulario();
-            } else {
-                alert("Hubo un error al guardar la dirección.");
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert("Hubo un error al guardar la dirección.");
-        });
-    } else {
-        alert("Por favor, completa todos los campos.");
-    }
+   
 }
 </script>
 

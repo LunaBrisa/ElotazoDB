@@ -36,6 +36,14 @@ const Direccion = sequelize.define("direccion", {
             key: 'id'
         }
     },
+    estado: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    ciudad: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
     createdAt: {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
