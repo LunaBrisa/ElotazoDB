@@ -36,10 +36,12 @@ router.get('/menu', async(req, res) => {
     res.render('productos', { productos, direccion });
 });
 
-
 router.get("/login", (req, res) => res.render("login"));
 router.get("/inicio", (req, res) => res.render("inicio"));
-router.get("/perfil", (req, res) => res.render("perfil"));
+router.get("/perfil", async(req, res) => {
+    const direccion = await Direccion.findAll({ where: { id_usuario: 1 } });
+    res.render("perfil", { direccion })
+});
 router.get("/estado", (req, res) => res.render("estadorepartidor"));
 
 export default router;

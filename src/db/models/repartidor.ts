@@ -38,7 +38,10 @@ const Repartidor = sequelize.define("repartidor", {
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
         type: DataTypes.DATE,
     },
-
+    status: {
+        type: DataTypes.ENUM('activo', 'inactivo'),
+        allowNull: false
+    },
 },
 {});
 export default Repartidor;

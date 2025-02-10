@@ -35,8 +35,19 @@
 </head>
 <body>
     <h1>Recorrido del Repartidor</h1>
-    <input type="text" id="address" placeholder="Ingresa tu dirección">
-    <button onclick="calculateRouteFromAddress()">Calcular Ruta</button>
+    <div>
+        <% if (typeof direccion !== 'undefined' && direccion.length > 0) { %>
+            <% direccion.forEach(direccion => { %>
+                <div>
+                    <button class="direccion-cuadro">
+                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.estado %>, <%= direccion.ciudad %>
+                    </button> 
+                </div>
+            <% }); %>
+        <% } else { %>
+            <p>No hay direcciones disponibles.</p>
+        <% } %>
+    </div>
     <div id="map"></div>
     <div id="directions-panel"></div>
     
