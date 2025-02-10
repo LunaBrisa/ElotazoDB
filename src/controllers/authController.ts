@@ -54,23 +54,3 @@ export const verificarToken = (req: Request, res: Response, next: NextFunction) 
   }
 };
 
-export const logout = async (req: Request, res: Response) => {
-  try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({ message: 'No hay token.' });
-    }
-
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
-
-    await Usuario.destroy({
-      where: { id: decoded.id },
-    });
-
-    res.clearCookie('token');
-    return res.status(200).json({ message: 'Has cerrado sesión.' });
-  } catch (error) {
-    console.error('Error en el logout:', error);
-    return res.status(500).json({ message: 'Error en el servidor. Inténtalo más tarde.'});
-  }
-};

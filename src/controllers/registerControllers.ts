@@ -4,6 +4,7 @@ import Usuario from '../db/models/usuario';
 import Persona from '../db/models/persona';
 import Cliente from '../db/models/clientes';
 import Repartidor from '../db/models/repartidor';
+import Direccion from '../db/models/direccion';
 
 export const registrarCliente = async (req: Request, res: Response) => {
     const {
@@ -15,6 +16,12 @@ export const registrarCliente = async (req: Request, res: Response) => {
         a_m,
         genero,
         fecha_nac,
+        col,
+        calle,
+        numero_ex,
+        codigo,
+        estado,
+        ciudad,
     } = req.body;
     try {
         const usuarioExistente = await Usuario.findOne({ where: { correo } });
@@ -40,6 +47,15 @@ export const registrarCliente = async (req: Request, res: Response) => {
             id_usuario: nuevoUsuario.id,
         });
         const nuevocliente = await Cliente.create({
+            id_usuario: nuevoUsuario.id,
+        });
+        const nuevaDireccion = await Direccion.create({
+            col,
+            calle,
+            numero_ex,
+            codigo,
+            estado,
+            ciudad,
             id_usuario: nuevoUsuario.id,
         });
 

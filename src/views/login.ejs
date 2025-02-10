@@ -96,7 +96,7 @@
 
                 if (response.ok) {
                     localStorage.setItem('token', data.token);
-                    window.location.href = '/'; // Redirigir a la página principal
+                    window.location.href = '/'; 
                 } else {
                     errorMessage.textContent = data.message;
                 }
