@@ -34,6 +34,10 @@ module.exports = {
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       type: Sequelize.DataTypes.DATE,
       },
+      ruta_imagen: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
+      },
     }),
     down: (queryInterface) => queryInterface.dropTable('productos'),
   }

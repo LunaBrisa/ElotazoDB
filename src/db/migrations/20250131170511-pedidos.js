@@ -39,10 +39,6 @@ module.exports = {
         type: Sequelize.DataTypes.ENUM('pendiente', 'en proceso', 'en camino', 'entregado', 'cancelado'),
         allowNull: false,
       },
-      descripcion: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false,
-      },
       metodo_pago: {
         type: Sequelize.DataTypes.ENUM('efectivo', 'transferencia'),
         allowNull: false,

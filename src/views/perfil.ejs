@@ -21,8 +21,8 @@
         <% if (typeof direccion !== 'undefined' && direccion.length > 0) { %>
             <% direccion.forEach(direccion => { %>
                 <div>
-                    <button class="direccion-cuadro" onclick="guardarDireccion('<%= direccion.calle %>', '<%= direccion.numero_ex %>', '<%= direccion.col %>', '<%= direccion.codigo %>', '<%= direccion.estado %>', '<%= direccion.ciudad %>')">
-                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.estado %>, <%= direccion.ciudad %>
+                    <button class="direccion-cuadro">
+                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.ciudad %>, <%= direccion.estado %>
                     </button> 
                 </div>
             <% }); %>

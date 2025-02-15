@@ -1,7 +1,7 @@
 require('dotenv').config();
 import {DataTypes, Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize("elotazodb", "root", "300105", ({
+const sequelize = new Sequelize("elotazodb", "root", "1234", ({
     host: process.env.DB_HOST,
     dialect: 'mysql'
 }));
@@ -14,7 +14,7 @@ const DetallePedido = sequelize.define("detalle_pedido", {
     },
     id_pedido: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: 'pedidos',
             key: 'id'
@@ -22,7 +22,7 @@ const DetallePedido = sequelize.define("detalle_pedido", {
     },
     id_producto: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
             model: 'productos',
             key: 'id'
@@ -30,15 +30,15 @@ const DetallePedido = sequelize.define("detalle_pedido", {
     },
     cantidad: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: true
     },
     precio_unitario:{
         type: DataTypes.DECIMAL(10,2),
-        allowNull: false
+        allowNull: true
     },
     subtotal:{
         type: DataTypes.DECIMAL(10,2),
-        allowNull: false
+        allowNull: true
     },
     createdAt: {
         allowNull: false,

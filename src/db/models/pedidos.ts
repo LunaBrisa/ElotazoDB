@@ -1,10 +1,11 @@
 require('dotenv').config();
 import {DataTypes, Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize("elotazodb", "root", "300105", ({
+const sequelize = new Sequelize("elotazodb", "root", "1234", ({
     host: process.env.DB_HOST,
     dialect: 'mysql'
 }));
+
 
 const Pedidos = sequelize.define("pedidos", {
     id: {
@@ -37,15 +38,13 @@ const Pedidos = sequelize.define("pedidos", {
     },
     fecha_entrega: {
         type: DataTypes.DATE,
-        allowNull: false
+        allowNull: false,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP')
     },
     status: {
         type: DataTypes.ENUM('pendiente', 'en proceso', 'en camino', 'entregado', 'cancelado'),
-        allowNull: false
-    },
-    descripcion:{
-        type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        defaultValue: "pendiente"
     },
     metodo_pago: {
         type: DataTypes.ENUM('efectivo', 'transferencia'),
