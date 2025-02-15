@@ -48,5 +48,6 @@ router.get("/perfil", async(req, res) => {
     res.render("perfil", { direccion })
 });
 router.get("/estado", (req, res) => res.render("estadorepartidor"));
+router.get("/aceptado", (req, res) => res.render("aceptacion"));
 
 export default router;
