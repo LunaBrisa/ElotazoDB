@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recorrido del Repartidor</title>
+    <title>Recorrido del Carrito 🚗</title>
     <style>
         #map {
             width: 100%;
@@ -17,12 +16,12 @@
     </style>
 </head>
 <body>
-    <h1>Recorrido del Repartidor</h1>
+    <h1>Recorrido del Carrito 🚗</h1>
     <div>
         <% if (typeof direccion !== 'undefined' && direccion.length > 0) { %>
             <% direccion.forEach(direccion => { %>
                 <div>
-                    <button class="direccion-cuadro">
+                    <button class="direccion-cuadro" onclick="guardarDireccion('<%= direccion.calle %>', '<%= direccion.numero_ex %>', '<%= direccion.col %>', '<%= direccion.codigo %>', '<%= direccion.estado %>', '<%= direccion.ciudad %>')">
                         <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.estado %>, <%= direccion.ciudad %>
                     </button> 
                 </div>
@@ -31,47 +30,102 @@
             <p>No hay direcciones disponibles.</p>
         <% } %>
     </div>
+    
     <div id="map"></div>
     <div id="directions-panel"></div>
-    
+
     <script>
-        let map, marker, geocoder;
+        let map, directionsService, directionsRenderer, marker;
+        const startPos = { lat: 25.534763790859802, lng: -103.35994294637933 }; 
 
         function initMap() {
-            geocoder = new google.maps.Geocoder();
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 14,
-                center: { lat: 25.5347, lng: -103.3599 }, // Ubicación inicial
+                center: startPos,
             });
 
+            directionsService = new google.maps.DirectionsService();
+            directionsRenderer = new google.maps.DirectionsRenderer({ map });
+
+            
             marker = new google.maps.Marker({
+                position: startPos,
                 map: map,
+                icon: {
+                    url: 'https://cdn-icons-png.flaticon.com/512/8662/8662338.png', // 🚗 Ícono de carrito
+                    scaledSize: new google.maps.Size(50, 50)
+                }
             });
 
-            // Obtener dirección guardada en localStorage
+           
             const direccionGuardada = localStorage.getItem("direccionUsuario");
             if (direccionGuardada) {
                 const direccion = JSON.parse(direccionGuardada);
-                document.getElementById("direccionInfo").innerText = 
-                    `${direccion.calle}, ${direccion.col}, CP ${direccion.codigo}, No. ${direccion.numero_ex}`;
-
-                // Convertir la dirección en coordenadas y mostrarla en el mapa
-                geocoder.geocode({ address: `${direccion.calle}, ${direccion.col}, ${direccion.codigo}` }, (results, status) => {
-                    if (status === "OK") {
-                        map.setCenter(results[0].geometry.location);
-                        marker.setPosition(results[0].geometry.location);
-                    } else {
-                        console.error("No se pudo geocodificar la dirección: " + status);
-                    }
-                });
-            } else {
-                document.getElementById("direccionInfo").innerText = "No hay dirección guardada.";
+                geocodeAddress(direccion);
             }
+        }
+
+        function geocodeAddress(direccion) {
+            const geocoder = new google.maps.Geocoder();
+            geocoder.geocode({ address: `${direccion.calle}, ${direccion.col}, ${direccion.codigo}, ${direccion.ciudad}, ${direccion.estado}` }, (results, status) => {
+                if (status === "OK") {
+                    calcularRuta(results[0].geometry.location);
+                } else {
+                    console.error("No se pudo geocodificar la dirección: " + status);
+                }
+            });
+        }
+
+        function calcularRuta(destino) {
+            const request = {
+                origin: startPos,
+                destination: destino,
+                travelMode: 'DRIVING'
+            };
+
+            directionsService.route(request, (result, status) => {
+                if (status === "OK") {
+                    directionsRenderer.setDirections(result);
+                    animarCarrito(result.routes[0].overview_path);
+                } else {
+                    console.error("No se pudo calcular la ruta: " + status);
+                }
+            });
+        }
+
+        function animarCarrito(path) {
+            let index = 0;
+
+            function mover() {
+                if (index < path.length) {
+                    const nextPosition = {
+                        lat: path[index].lat(),
+                        lng: path[index].lng()
+                    };
+
+                    marker.setPosition(nextPosition); 
+                    map.panTo(nextPosition); 
+
+                    index++;
+                    setTimeout(mover, 200); 
+                }
+            }
+
+            mover();
+        }
+
+        function guardarDireccion(calle, numero_ex, col, codigo, estado, ciudad) {
+            const direccion = { calle, numero_ex, col, codigo, estado, ciudad };
+            localStorage.setItem("direccionUsuario", JSON.stringify(direccion));
+            window.location.reload();
         }
     </script>
 
-    <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8&callback=initMap">
-    </script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8&callback=initMap"></script>
 </body>
+</html>
 
+
+
+//25.534763790859802, -103.35994294637933      AIzaSyCxEZ3MFQjkThYM6KAnQAq7_bZ7SXGsbf8
+//Emiliano Zapata #498, Lazaro Cardenas, C.P. 27390 , Torreon, Coahuila
