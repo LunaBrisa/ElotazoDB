@@ -159,13 +159,18 @@
             <% direccion.forEach(direccion => { %>
                 <div>
                     <button class="direccion-cuadro">
-                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.estado %>, <%= direccion.ciudad %>
+                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.ciudad %>, <%= direccion.estado %>
                     </button> 
                 </div>
             <% }); %>
         <% } else { %>
             <p>No hay direcciones disponibles.</p>
         <% } %>
+        <label for="metodo_pago">Método de Pago:</label>
+        <select name="metodo_pago" id="metodo_pago">
+            <option value="efectivo">Efectivo</option>
+            <option value="transferencia">Transferencia</option>
+        </select>
         <button class="btn-enviar" type="submit">Enviar Pedido</button>
         <button class="btn-cerrar" type="button" onclick="cerrarFormulario()">Cancelar</button> 
        </div>
@@ -174,6 +179,43 @@
 
 
 <script>
+    document.getElementById("direccionForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); // Evita el recargo de la página
+
+    const metodoPago = document.getElementById("metodo_pago").value;
+
+    const datosPedido = {
+    id_cliente: 2,  
+    id_repartidor: 1, 
+    fecha_pedido: new Date().toISOString(),
+    total: carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0),
+    metodo_pago: metodoPago,
+    productos: carrito
+};
+
+
+    try {
+        const respuesta = await fetch('/crear-pedido', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(datosPedido)
+        });
+
+        const resultado = await respuesta.json();
+        alert(resultado.message);
+
+        if (respuesta.ok) {
+            carrito = []; 
+            cerrarFormulario();
+            cerrarCarrito();
+        }
+    } catch (error) {
+        console.error('Error al enviar el pedido:', error);
+    }
+});
+
     let carrito = [];
 
     function agregarAlCarrito(nombre, precio) {

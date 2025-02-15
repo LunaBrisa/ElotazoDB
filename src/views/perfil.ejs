@@ -40,7 +40,7 @@
             <% direccion.forEach(direccion => { %>
                 <div>
                     <button class="direccion-cuadro">
-                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.estado %>, <%= direccion.ciudad %>
+                        <%= direccion.calle %> #<%= direccion.numero_ex %>, <%= direccion.col %>, C.P. <%= direccion.codigo %> , <%= direccion.ciudad %>, <%= direccion.estado %>
                     </button> 
                 </div>
             <% }); %>
@@ -48,6 +48,7 @@
             <p>No hay direcciones disponibles.</p>
         <% } %>
     </div>
+    
     <div id="map"></div>
     <div id="directions-panel"></div>
     

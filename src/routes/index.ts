@@ -3,7 +3,12 @@ import { registrarCliente, registrarRepartidor } from '../controllers/registerCo
 import {login, verificarToken} from '../controllers/authController';    
 import Productos from '../db/models/productos';
 import Direccion from '../db/models/direccion';
+import { craerpedidos } from '../controllers/PedidoController';
+
 const router = express.Router();
+router.post('/crear-pedido', async (req, res) => {
+    await craerpedidos(req, res);
+});
 
 router.get('/registro', (req, res) => {
     res.render('registerc'); 
