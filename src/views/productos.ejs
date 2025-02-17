@@ -148,7 +148,7 @@
     <h2>Carrito</h2>
     <div class="carrito-items" id="carritoItems"></div>
     <button class="btn-cerrar" onclick="cerrarCarrito()">Cerrar</button>
-    <button class="btn-enviar" id="btnPedir" onclick="mostrarFormulario()" disabled>Pedir</button>
+    <button class="btn-envi  ar" id="btnPedir" onclick="mostrarFormulario()" disabled>Pedir</button>
 </div>
 
 <div class="ventana" id="formularioVentana" style="display: none;">
@@ -171,7 +171,7 @@
             <option value="efectivo">Efectivo</option>
             <option value="transferencia">Transferencia</option>
         </select>
-       <button class="btn-enviar" type="submit"><a href="/perfil">Enviar Pedido</a></button>   
+        <button class="btn-enviar" type="submit">Enviar Pedido</button>
         <button class="btn-cerrar" type="button" onclick="cerrarFormulario()">Cancelar</button> 
        </div>
     </form>
@@ -179,18 +179,21 @@
 
 
 <script>
- document.getElementById("direccionForm").addEventListener("submit", async function (event) {
+    document.getElementById("direccionForm").addEventListener("submit", async function (event) {
     event.preventDefault(); // Evita el recargo de la página
 
     const metodoPago = document.getElementById("metodo_pago").value;
+    
 
     const datosPedido = {
-        id_repartidor: 1, // Puedes cambiarlo dinámicamente
-        fecha_pedido: new Date().toISOString(),
-        total: carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0),
-        metodo_pago: metodoPago,
-        productos: carrito
-    };
+    id_cliente: 2,  
+    id_repartidor: 1, 
+    fecha_pedido: new Date().toISOString(),
+    total: carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0),
+    metodo_pago: metodoPago,
+    productos: carrito
+};
+
 
     try {
         const respuesta = await fetch('/crear-pedido', {
@@ -205,19 +208,14 @@
         alert(resultado.message);
 
         if (respuesta.ok) {
-            carrito = [];
+            carrito = []; 
             cerrarFormulario();
             cerrarCarrito();
-            console.log("Pedido enviado, redirigiendo a perfil...");
-            window.location.href = '/perfil'; // Redirige a la página de perfil
         }
     } catch (error) {
         console.error('Error al enviar el pedido:', error);
     }
 });
-
-
-
 
     let carrito = [];
 

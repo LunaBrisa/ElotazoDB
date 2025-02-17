@@ -55,16 +55,7 @@ button {
 button:hover {
     background-color: #218838;
 }</style>
-<body>
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Formulario de Pedido</title>
-        <link rel="stylesheet" href="styles.css">
-    </head>
-    <body>
+
         <div class="container">
             <h1>Formulario de Pedido</h1>
             <form id="pedidoForm">
@@ -100,18 +91,47 @@ button:hover {
         </div>
     
         <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // Obtener el nombre del usuario desde localStorage
-                const nombreUsuario = localStorage.getItem('nombreUsuario');
+         document.getElementById('pedidoForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const formData = {
+        id_cliente: 2,  // Puedes obtenerlo de localStorage o una sesión
+        id_repartidor: 1, 
+        metodo_pago: document.getElementById('metodoPago').value,
+        total: parseFloat(document.getElementById('precioTotal').value),
+        fecha_pedido: new Date().toISOString(),
+        status: document.getElementById('status').value
+    };
+    try {
+    const response = await fetch('http://localhost:3333/api/pedidos', { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+    });
+
+    console.log("Respuesta del servidor:", response);
     
-                // Si el nombre del usuario existe, rellenar el campo "Nombre del Cliente"
-                if (nombreUsuario) {
-                    document.getElementById('nombreCliente').value = nombreUsuario;
-                }
-            });
+    // Si la respuesta no es 2xx, mostrar el contenido como texto
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error en la respuesta del servidor:", errorText);
+        alert("Error al crear el pedido: " + errorText);
+        return;
+    }
+
+    const data = await response.json();
+
+    alert("Pedido creado con éxito");
+    window.location.href = "/perfil";
+} catch (error) {
+    console.error("Error al crear el pedido:", error);
+    alert("Error al crear el pedido: " + error.message);
+}
+
+});
+
         </script>
-    </body>
-    </html>
+   
 
     
 </body>
