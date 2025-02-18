@@ -171,7 +171,7 @@
             <option value="efectivo">Efectivo</option>
             <option value="transferencia">Transferencia</option>
         </select>
-        <button class="btn-enviar" type="submit">Enviar Pedido</button>
+       <button class="btn-enviar" type="submit"><a href="/perfil">Enviar Pedido</a></button>   
         <button class="btn-cerrar" type="button" onclick="cerrarFormulario()">Cancelar</button> 
        </div>
     </form>
@@ -216,11 +216,16 @@ document.getElementById("direccionForm").addEventListener("submit", async functi
             actualizarCarrito();
             cerrarFormulario();
             cerrarCarrito();
+            console.log("Pedido enviado, redirigiendo a perfil...");
+            window.location.href = '/perfil'; // Redirige a la página de perfil
         }
     } catch (error) {
         console.error('Error al enviar el pedido:', error);
     }
 });
+
+
+
 
     let carrito = [];
 
