@@ -148,7 +148,7 @@
     <h2>Carrito</h2>
     <div class="carrito-items" id="carritoItems"></div>
     <button class="btn-cerrar" onclick="cerrarCarrito()">Cerrar</button>
-    <button class="btn-envi  ar" id="btnPedir" onclick="mostrarFormulario()" disabled>Pedir</button>
+    <button class="btn-enviar" id="btnPedir" onclick="mostrarFormulario()" disabled>Pedir</button>
 </div>
 
 <div class="ventana" id="formularioVentana" style="display: none;">
@@ -180,11 +180,11 @@
 
 <script>
     document.getElementById("direccionForm").addEventListener("submit", async function (event) {
-    event.preventDefault(); // Evita el recargo de la página
+    event.preventDefault(); 
 
     const metodoPago = document.getElementById("metodo_pago").value;
+  
     
-
     const datosPedido = {
     id_cliente: 2,  
     id_repartidor: 1, 

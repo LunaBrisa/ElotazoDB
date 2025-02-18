@@ -338,6 +338,9 @@
       </svg>
     </div>
     <nav class="popup-window">
+      <div>
+        <span id="nombreUsuario" style="font-size: 20px;">...</span>
+      </div>
       <legend>Quick Start</legend>
       <ul>
         <li>
@@ -455,6 +458,7 @@
 
   function cerrarSesion() {
       localStorage.removeItem('token');
+      localStorage.removeItem('nombreUsuario'); 
       window.location.href = '/';
   }
 
@@ -462,4 +466,12 @@
       window.location.href = '/loginn';
   }
   actualizarBotonSesion();
+
+  function actualizarNombreUsuario() {
+        let nombreUsuario = localStorage.getItem('nombreUsuario');
+        if (nombreUsuario) {
+            document.getElementById('nombreUsuario').textContent = nombreUsuario;
+        }
+    }
+    actualizarNombreUsuario();
 </script>

@@ -28,10 +28,7 @@ const Productos = sequelize.define("productos", {
         type: DataTypes.ENUM('activo', 'inactivo'),
         allowNull: false
     },
-    ruta_imagen: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
+   
     createdAt: {
         allowNull: false,
         defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
