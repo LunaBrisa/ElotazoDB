@@ -7,13 +7,12 @@ import { craerpedidos } from '../controllers/PedidoController';
 
 const router = express.Router();
 router.post('/crear-pedido', async (req, res) => {
-    await craerpedidos(req, res);
+    await verificarToken, craerpedidos(req, res);
 });
 
 router.get('/registro', (req, res) => {
     res.render('registerc'); 
 });
-
 router.post('/registrar', async (req, res) => {
     await registrarCliente(req, res);
 });
@@ -29,7 +28,8 @@ router.get('/loginn', (req, res) => {
     res.render('login');
 });
 router.post('/login', async (req, res) => {
-    await login(req, res);
+    await verificarToken, login(req, res);
+    
 });
 
 router.get('/', (req, res) => {
@@ -38,14 +38,15 @@ router.get('/', (req, res) => {
 router.get('/menu', async(req, res) => {
     const productos = await Productos.findAll({ where: { status: "activo" } });
     const direccion = await Direccion.findAll({ where: { id_usuario: 1 } });
+    await verificarToken;
     res.render('productos', { productos, direccion });
 });
 
-router.get("/login", (req, res) => res.render("login"));
+
 router.get("/inicio", (req, res) => res.render("inicio"));
 router.get("/perfil", async(req, res) => {
     const direccion = await Direccion.findAll({ where: { id_usuario: 1 } });
-    res.render("perfil", { direccion })
+    res.render("perfil", {verificarToken, direccion })
 });
 router.get("/estado", (req, res) => res.render("estadorepartidor"));
 router.get("/aceptado", (req, res) => res.render("aceptacion"));

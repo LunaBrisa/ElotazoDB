@@ -96,6 +96,8 @@
 
                 if (response.ok) {
                     localStorage.setItem('token', data.token);
+                    localStorage.setItem('id', data.usuario.id)
+                    localStorage.setItem('nombreUsuario', data.usuario.nombre_usuario);
                     window.location.href = '/'; 
                 } else {
                     errorMessage.textContent = data.message;

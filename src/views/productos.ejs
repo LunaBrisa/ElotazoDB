@@ -133,9 +133,9 @@
                 <div class="producto">
                     <h3><%= producto.nombre %></h3>
                     <p><%= producto.descripcion %></p>
-                    <p class="precio"><%= producto.precio %></p>
+                    <p class="precio"><%= producto.precio_u %></p>
                     <input type="number" class="cantidad" min="1" max="20" value="1">
-                    <button class="btn-ordenar" onclick="agregarAlCarrito('<%= producto.nombre %>')">Ordenar</button>
+                    <button class="btn-ordenar" onclick="agregarAlCarrito('<%= producto.nombre %>', '<%= producto.id %>')">Ordenar</button>
                 </div>
             <% }); %>
         <% } else { %>
@@ -179,20 +179,25 @@
 
 
 <script>
-    document.getElementById("direccionForm").addEventListener("submit", async function (event) {
-    event.preventDefault(); // Evita el recargo de la página
+document.getElementById("direccionForm").addEventListener("submit", async function (event) {
+    event.preventDefault(); 
 
     const metodoPago = document.getElementById("metodo_pago").value;
 
     const datosPedido = {
-    id_cliente: 2,  
-    id_repartidor: 1, 
-    fecha_pedido: new Date().toISOString(),
-    total: carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0),
-    metodo_pago: metodoPago,
-    productos: carrito
-};
-
+        id_cliente: 2,  
+        id_repartidor: 1, 
+        fecha_pedido: new Date().toISOString(),
+        total: carrito.reduce((acc, item) => acc + item.precio * item.cantidad, 0),
+        metodo_pago: metodoPago,
+        productos: carrito.map(item => ({
+            nombre: item.nombre,
+            id_producto: item.id_producto,
+            cantidad: item.cantidad,
+            precio_unitario: item.precio,
+            subtotal: item.precio * item.cantidad
+        }))
+    };
 
     try {
         const respuesta = await fetch('/crear-pedido', {
@@ -208,6 +213,7 @@
 
         if (respuesta.ok) {
             carrito = []; 
+            actualizarCarrito();
             cerrarFormulario();
             cerrarCarrito();
         }
@@ -218,28 +224,36 @@
 
     let carrito = [];
 
-    function agregarAlCarrito(nombre, precio) {
-        let productoContainer = [...document.querySelectorAll('.producto')].find(p => p.querySelector('h3').innerText === nombre);
-        let cantidad = parseInt(productoContainer.querySelector('.cantidad').value) || 1;
+    function agregarAlCarrito(nombre, id) {  
+    let productoContainer = [...document.querySelectorAll('.producto')].find(p => p.querySelector('h3').innerText === nombre);
+    let precio = parseFloat(productoContainer.querySelector('.precio').innerText); 
+    let cantidad = parseInt(productoContainer.querySelector('.cantidad').value) || 1;
 
-        carrito.push({ nombre, precio, cantidad });
-        actualizarCarrito();
+    let productoExistente = carrito.find(item => item.id_producto === id);
+
+    if (productoExistente) {
+        productoExistente.cantidad += cantidad;
+    } else {
+        carrito.push({ id_producto: id, nombre, precio, cantidad });
     }
 
+    actualizarCarrito();
+}
+
     function actualizarCarrito() {
-        let carritoItems = document.getElementById("carritoItems");
-        carritoItems.innerHTML = "";
+    let carritoItems = document.getElementById("carritoItems");
+    carritoItems.innerHTML = "";
 
-        carrito.forEach((producto, index) => {
-            let item = document.createElement("div");
-            item.innerHTML = `
-                <p>${producto.nombre} - ${producto.cantidad} x $${producto.precio}</p>
-                <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
-            `;
-            carritoItems.appendChild(item);
-        });
+    carrito.forEach((producto, index) => {
+        let item = document.createElement("div");
+        item.innerHTML = `
+            <p>${producto.nombre} - ${producto.cantidad} x $${producto.precio.toFixed(2)} = $${(producto.precio * producto.cantidad).toFixed(2)}</p>
+            <button onclick="eliminarDelCarrito(${index})">Eliminar</button>
+        `;
+        carritoItems.appendChild(item);
+    });
 
-        actualizarEstadoBotonPedir();
+    actualizarEstadoBotonPedir();
     }
 
     function eliminarDelCarrito(index) {

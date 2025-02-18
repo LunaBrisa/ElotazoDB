@@ -41,16 +41,23 @@ export const login = async (req: Request, res: Response) => {
 export const verificarToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header("Authorization");
 
+  console.log("🔍 Token recibido:", token); 
+
   if (!token) {
     return res.status(401).json({ message: "Acceso denegado, token no proporcionado" });
-  }
+  } 
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: number };
-    (req as any).user = decoded; 
+    const tokenSinBearer = token.replace("Bearer ", "").trim();
+    const decoded = jwt.verify(tokenSinBearer, JWT_SECRET) as { id: number };
+
+    console.log("✅ Token decodificado:", decoded); 
+
+    (req as any).user = { id: decoded.id }; 
+
     next();
   } catch (error) {
+    console.error("❌ Error verificando el token:", error);
     return res.status(401).json({ message: "Token inválido" });
   }
 };
-
