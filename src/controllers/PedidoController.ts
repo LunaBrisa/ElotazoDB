@@ -16,40 +16,44 @@ interface IPedido {
 
 // Función para crear pedidos
 export const craerpedidos = async (req: Request, res: Response) => {
-    const { id_cliente, metodo_pago, total, productos } = req.body;
-
-    // Validación básica
-    if (!id_cliente || !metodo_pago || !total || !productos || !Array.isArray(productos)) {
-        return res.status(400).json({ message: 'Datos incompletos o inválidos' });
-    }
-
     try {
-        // Crear el pedido
-        const nuevoPedido = await Pedido.create({
-            id_cliente: id_cliente,
-            id_repartidor: 1, // Asignar un repartidor por defecto o dejarlo null
-            total: total,
-            fecha_pedido: new Date().toISOString(),
-            fecha_entrega: new Date(new Date().setDate(new Date().getDate() + 3)).toISOString(), // Entrega en 3 días
-            metodo_pago: metodo_pago,
-            status: 'pendiente', // Estado inicial del pedido
-        }) as unknown as IPedido; // Type casting para asegurar que TypeScript reconozca el tipo
+        const { id_cliente, id_repartidor, metodo_pago, total, fecha_pedido,id_producto, productos } = req.body;
 
-        // Crear los detalles del pedido
-        for (const producto of productos) {
-            await DetallePedido.create({
-                id_pedido: nuevoPedido.id, // Aquí TypeScript ya sabe que `nuevoPedido` tiene una propiedad `id`
+        if (!productos || productos.length === 0) {
+            return res.status(400).json({ message: "No hay productos en el pedido." });
+        }
+
+        // Crear el pedido en la tabla 'pedidos'
+        const nuevoPedido = await Pedido.create({
+            id_cliente,
+            id_repartidor: id_repartidor || 1, 
+            total,
+            fecha_pedido: new Date().toISOString(),
+            fecha_entrega: "2023-05-01", 
+            metodo_pago
+        });
+
+        // Insertar cada producto en la tabla 'detalle_pedido'
+        const detalles = await Promise.all(productos.map(async (producto: any) => {
+            return await DetallePedido.create({
+                id_pedido: nuevoPedido.get("id"),
                 id_producto: producto.id_producto,
                 cantidad: producto.cantidad,
                 precio_unitario: producto.precio_unitario,
-                subtotal: producto.subtotal,
+                subtotal: producto.subtotal
             });
-        }
+        }));
+        console.log("Datos recibidos:", req.body);
 
-        res.status(201).json({ message: 'Pedido creado con éxito', pedido: nuevoPedido });
+        return res.status(200).json({
+            message: "Pedido creado con éxito",
+            pedido: nuevoPedido,
+            detalles
+        });
+
     } catch (error) {
-        console.error('Error al crear el pedido:', error);
-        res.status(500).json({ message: 'Error interno del servidor' });
+        console.error("Error al crear el pedido:", error);
+        return res.status(500).json({ message: "Error interno del servidor" });
     }
 };
 

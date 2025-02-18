@@ -22,7 +22,6 @@ router.post('/login', async (req, res) => {
 router.get('/registro', (req, res) => {
     res.render('registerc');
 });
-
 router.post('/registrar', async (req, res) => {
     await registrarCliente(req, res);
 });
@@ -44,6 +43,7 @@ router.get('/', (req, res) => {
 router.get('/menu', async (req, res) => {
     const productos = await Productos.findAll({ where: { status: "activo" } });
     const direccion = await Direccion.findAll({ where: { id_usuario: 1 } });
+    await verificarToken;
     res.render('productos', { productos, direccion });
 });
 
